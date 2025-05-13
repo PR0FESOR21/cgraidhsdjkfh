@@ -37,29 +37,32 @@ const TokenomicsSection: React.FC = () => {
   };
 
   return (
-    <section id="tokenomics" className="relative py-5 bg-gradient-to-b from-dark to-black overflow-hidden">
+    <section id="tokenomics" className="relative py-20 bg-gradient-to-b from-dark to-black overflow-hidden">
       <div className="container-custom">
         <motion.div
           ref={ref}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
           variants={containerVariants}
-          className="max-w-6xl mx-auto"
+          className="max-w-7xl mx-auto"
         >
           <motion.div className="text-center mb-16" variants={itemVariants}>
-            <h2 className="section-title">Tokenomics</h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Total Supply: 10,000,000,000 $CIGAR
-            </p>
+            <h2 className="section-title mb-4">Tokenomics</h2>
+            <div className="flex flex-col items-center gap-2">
+              <p className="text-2xl md:text-3xl font-bold text-cigar-gold">
+                10,000,000,000 $CIGAR
+              </p>
+              <p className="text-lg text-gray-400">Total Supply</p>
+            </div>
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             {/* Circular Chart */}
             <motion.div 
-              className="flex justify-center items-center"
+              className="lg:col-span-5 flex justify-center items-center"
               variants={itemVariants}
             >
-              <div className="relative w-64 h-64 md:w-80 md:h-80">
+              <div className="relative w-full max-w-md aspect-square">
                 <svg viewBox="0 0 100 100" className="w-full h-full transform -rotate-90">
                   {tokenomics.map((item, index) => {
                     const prevPercentages = tokenomics
@@ -86,8 +89,11 @@ const TokenomicsSection: React.FC = () => {
                     );
                   })}
                   <circle cx="50" cy="50" r="30" fill="#0f0f0f" />
-                  <text x="50" y="50" textAnchor="middle" dominantBaseline="middle" fill="#f7931e" fontSize="10" fontWeight="bold">
+                  <text x="50" y="45" textAnchor="middle" fill="#f7931e" fontSize="10" fontWeight="bold">
                     $CIGAR
+                  </text>
+                  <text x="50" y="55" textAnchor="middle" fill="#f7931e" fontSize="6">
+                    ALLOCATION
                   </text>
                 </svg>
 
@@ -103,43 +109,58 @@ const TokenomicsSection: React.FC = () => {
             </motion.div>
 
             {/* Tokenomics List */}
-            <motion.div className="flex flex-col justify-center" variants={itemVariants}>
-              <div className="space-y-4">
+            <motion.div 
+              className="lg:col-span-7 flex flex-col justify-center"
+              variants={containerVariants}
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {tokenomics.map((item, index) => (
                   <motion.div 
                     key={item.name}
-                    className="flex items-center p-4 rounded-lg bg-dark/50 border border-gray-800"
-                    initial={{ x: 50, opacity: 0 }}
-                    animate={inView ? { x: 0, opacity: 1 } : { x: 50, opacity: 0 }}
-                    transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-                    whileHover={{ x: 10 }}
+                    className="bg-dark/30 backdrop-blur-sm rounded-xl border border-gray-800 hover:border-gray-700 transition-all duration-300"
+                    variants={itemVariants}
+                    whileHover={{ y: -2, borderColor: item.color }}
                   >
-                    <div 
-                      className="w-12 h-12 rounded-full flex items-center justify-center mr-4"
-                      style={{ backgroundColor: `${item.color}20` }}
-                    >
-                      <item.icon size={24} color={item.color} />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex justify-between items-start">
-                        <h3 className="font-semibold text-white">{item.name}</h3>
-                        <span className="font-bold text-cigar-gold ml-2">{item.percentage}%</span>
+                    <div className="p-4 flex items-start gap-4">
+                      <div 
+                        className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
+                        style={{ backgroundColor: `${item.color}15` }}
+                      >
+                        <item.icon size={20} style={{ color: item.color }} />
                       </div>
-                      <p className="text-sm text-gray-400 mt-1">{item.label}</p>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between gap-2">
+                          <h3 className="font-semibold text-white truncate" style={{ color: item.color }}>
+                            {item.name}
+                          </h3>
+                          <span className="font-bold shrink-0" style={{ color: item.color }}>
+                            {item.percentage}%
+                          </span>
+                        </div>
+                        <p className="text-sm text-gray-400 mt-1 line-clamp-2">
+                          {item.label}
+                        </p>
+                      </div>
                     </div>
                   </motion.div>
                 ))}
               </div>
 
               <motion.div 
-                className="mt-8 p-4 rounded-lg border border-cigar-gold/30 bg-gradient-to-r from-dark to-cigar-gold/10"
-                initial={{ opacity: 0 }}
-                animate={inView ? { opacity: 1 } : { opacity: 0 }}
-                transition={{ duration: 0.5, delay: 0.6 }}
+                className="mt-8 p-6 rounded-xl bg-gradient-to-r from-dark via-cigar-ember/10 to-dark border border-cigar-gold/30"
+                variants={itemVariants}
               >
-                <p className="text-sm text-gray-300">
-                  <span className="font-semibold text-cigar-gold">Transaction Fee:</span> 2% on each transaction - 1% distributed to holders, 1% sent to burn wallet.
-                </p>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-cigar-gold/10 flex items-center justify-center">
+                    <BadgeDollarSign size={20} className="text-cigar-gold" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-cigar-gold mb-1">Transaction Fee</h4>
+                    <p className="text-sm text-gray-300">
+                      2% on each transaction - 1% distributed to holders, 1% sent to burn wallet
+                    </p>
+                  </div>
+                </div>
               </motion.div>
             </motion.div>
           </div>
