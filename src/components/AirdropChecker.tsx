@@ -10,6 +10,8 @@ interface AirdropResponse {
   amount: number;
 }
 
+const BASE_CHAIN_ID = '0x2105'; // Base Mainnet Chain ID
+
 const AirdropChecker: React.FC = () => {
   const [ref, inView] = useInView({
     triggerOnce: false,
@@ -25,11 +27,61 @@ const AirdropChecker: React.FC = () => {
   const [currentWallet, setCurrentWallet] = useState<'metamask' | 'okx' | null>(null);
   const [hasMetaMask, setHasMetaMask] = useState(false);
   const [hasOKX, setHasOKX] = useState(false);
+  const [showNetworkModal, setShowNetworkModal] = useState(false);
 
   useEffect(() => {
     setHasMetaMask(typeof window.ethereum !== 'undefined');
     setHasOKX(typeof window.okxwallet !== 'undefined');
   }, []);
+
+  const switchToBase = async (provider: any) => {
+    try {
+      await provider.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: BASE_CHAIN_ID }],
+      });
+      return true;
+    } catch (switchError: any) {
+      if (switchError.code === 4902) {
+        try {
+          await provider.request({
+            method: 'wallet_addEthereumChain',
+            params: [{
+              chainId: BASE_CHAIN_ID,
+              chainName: 'Base',
+              nativeCurrency: {
+                name: 'ETH',
+                symbol: 'ETH',
+                decimals: 18
+              },
+              rpcUrls: ['https://mainnet.base.org'],
+              blockExplorerUrls: ['https://basescan.org']
+            }],
+          });
+          return true;
+        } catch (addError) {
+          console.error('Error adding Base network:', addError);
+          return false;
+        }
+      }
+      console.error('Error switching to Base network:', switchError);
+      return false;
+    }
+  };
+
+  const checkAndSwitchNetwork = async (provider: any): Promise<boolean> => {
+    try {
+      const chainId = await provider.request({ method: 'eth_chainId' });
+      if (chainId !== BASE_CHAIN_ID) {
+        setShowNetworkModal(true);
+        return false;
+      }
+      return true;
+    } catch (error) {
+      console.error('Error checking network:', error);
+      return false;
+    }
+  };
 
   const connectMetaMask = async () => {
     try {
@@ -43,6 +95,11 @@ const AirdropChecker: React.FC = () => {
 
       if (!accounts || accounts.length === 0) {
         throw new Error('No accounts found. Please create an account in MetaMask.');
+      }
+
+      const isCorrectNetwork = await checkAndSwitchNetwork(window.ethereum);
+      if (!isCorrectNetwork) {
+        return;
       }
 
       setAddress(accounts[0]);
@@ -70,6 +127,11 @@ const AirdropChecker: React.FC = () => {
         throw new Error('No accounts found. Please create an account in OKX Wallet.');
       }
 
+      const isCorrectNetwork = await checkAndSwitchNetwork(window.okxwallet);
+      if (!isCorrectNetwork) {
+        return;
+      }
+
       setAddress(accounts[0]);
       setIsConnected(true);
       setCurrentWallet('okx');
@@ -83,6 +145,22 @@ const AirdropChecker: React.FC = () => {
         ? err.message
         : 'Failed to connect to OKX Wallet';
       setError(errorMessage);
+    }
+  };
+
+  const handleSwitchNetwork = async () => {
+    const provider = currentWallet === 'metamask' ? window.ethereum : window.okxwallet;
+    const success = await switchToBase(provider);
+    if (success) {
+      setShowNetworkModal(false);
+      // Reconnect wallet after network switch
+      if (currentWallet === 'metamask') {
+        await connectMetaMask();
+      } else {
+        await connectOKX();
+      }
+    } else {
+      setError('Failed to switch to Base network. Please try again.');
     }
   };
 
@@ -236,7 +314,7 @@ const AirdropChecker: React.FC = () => {
 
           <motion.div className="mt-8 p-6 rounded-lg bg-gradient-to-r from-dark via-cigar-ember/20 to-dark border border-cigar-gold/30" variants={containerVariants}>
             <p className="text-center text-sm text-gray-400">
-              Make sure you're connected to the Ethereum network to check your airdrop allocation.
+              Make sure you're connected to the Base network to check your airdrop allocation.
             </p>
           </motion.div>
         </motion.div>
@@ -297,6 +375,53 @@ const AirdropChecker: React.FC = () => {
                       {hasOKX ? 'Connect to your OKX Wallet' : 'Please install OKX Wallet'}
                     </p>
                   </div>
+                </motion.button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Network Switch Modal */}
+      <AnimatePresence>
+        {showNetworkModal && (
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/80 backdrop-blur-sm"
+              onClick={() => setShowNetworkModal(false)}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="relative w-full max-w-md p-6 bg-dark border border-cigar-gold/20 rounded-xl"
+            >
+              <div className="text-center mb-6">
+                <h3 className="text-xl font-bold text-white mb-2">Wrong Network</h3>
+                <p className="text-gray-400">
+                  Please switch to the Base network to continue
+                </p>
+              </div>
+
+              <div className="flex justify-center gap-4">
+                <motion.button
+                  className="btn-primary"
+                  onClick={handleSwitchNetwork}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Switch to Base
+                </motion.button>
+                <motion.button
+                  className="btn-outline"
+                  onClick={() => setShowNetworkModal(false)}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Cancel
                 </motion.button>
               </div>
             </motion.div>
