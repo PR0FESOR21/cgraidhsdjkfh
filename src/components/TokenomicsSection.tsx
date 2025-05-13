@@ -10,14 +10,14 @@ const TokenomicsSection: React.FC = () => {
   });
 
   const tokenomics = [
-    { name: 'Community Airdrop 🔥', percentage: 25, color: '#E25822', icon: Gift, label: 'For registered users (based on Base activity)' },
-    { name: 'NFT Holder Rewards 🎨', percentage: 5, color: '#9333EA', icon: Palette, label: 'For official $CIGAR NFT holders' },
+    { name: 'Community Airdrop 🔥', percentage: 25, color: '#F7931E', icon: Gift, label: 'For registered users (based on Base activity)' },
+    { name: 'NFT Holder Rewards 🎨', percentage: 5, color: '#8B5CF6', icon: Palette, label: 'For official $CIGAR NFT holders' },
     { name: 'Holder Reward 💎', percentage: 10, color: '#2563EB', icon: Diamond, label: 'For holders who don\'t sell (silent snapshot)' },
     { name: 'Ecosystem & LP Rewards 🌐', percentage: 20, color: '#059669', icon: Globe, label: 'For LP staking, events & community (12-month vesting)' },
     { name: 'Liquidity Provision 💧', percentage: 10, color: '#3B82F6', icon: Droplets, label: 'Provided on DEX (Base/ETH/USDC pair)' },
-    { name: 'Marketing & Campaigns 📣', percentage: 12, color: '#F7931E', icon: BadgeDollarSign, label: 'Campaigns, collaborations & promotions' },
+    { name: 'Marketing & Campaigns 📣', percentage: 12, color: '#E25822', icon: BadgeDollarSign, label: 'Campaigns, collaborations & promotions' },
     { name: 'Core Team 🧠', percentage: 8, color: '#DC2626', icon: Brain, label: '8 months cliff + 18 months linear vesting' },
-    { name: 'Strategic & Listings 🤝', percentage: 5, color: '#8B5CF6', icon: Handshake, label: 'For CEX listings & strategic partners (locked)' },
+    { name: 'Strategic & Listings 🤝', percentage: 5, color: '#9333EA', icon: Handshake, label: 'For CEX listings & strategic partners (locked)' },
     { name: 'Reserve & Operational 🧾', percentage: 5, color: '#6B7280', icon: Archive, label: 'Including reserve & development fund' },
   ];
 
@@ -127,7 +127,7 @@ const TokenomicsSection: React.FC = () => {
                     <div className="flex-1">
                       <div className="flex justify-between items-start">
                         <h3 className="font-semibold text-white">{item.name}</h3>
-                        <span className="font-bold text-cigar-gold ml-2">{item.percentage}%</span>
+                        <span className="font-bold" style={{ color: item.color }}>{item.percentage}%</span>
                       </div>
                       <p className="text-sm text-gray-400 mt-1">{item.label}</p>
                     </div>
@@ -160,7 +160,7 @@ const TokenomicsSection: React.FC = () => {
                 <div className="flex-1">
                   <div className="flex justify-between items-start">
                     <h3 className="font-semibold text-white">{item.name}</h3>
-                    <span className="font-bold text-cigar-gold ml-2">{item.percentage}%</span>
+                    <span className="font-bold" style={{ color: item.color }}>{item.percentage}%</span>
                   </div>
                   <p className="text-sm text-gray-400 mt-1">{item.label}</p>
                 </div>
