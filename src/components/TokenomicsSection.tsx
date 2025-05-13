@@ -74,7 +74,7 @@ const TokenomicsSection: React.FC = () => {
                     const offset = (prevPercentages / 100) * circumference;
                     const dash = (item.percentage / 100) * circumference;
                     const angle = ((prevPercentages + item.percentage / 2) / 100) * 360;
-                    const labelRadius = 30;
+                    const labelRadius = 35; // Increased from 30 to 35 to move labels more towards the center
                     const labelX = 50 + labelRadius * Math.cos((angle - 90) * Math.PI / 180);
                     const labelY = 50 + labelRadius * Math.sin((angle - 90) * Math.PI / 180);
 
