@@ -8,6 +8,7 @@ import RoadmapSection from './components/RoadmapSection';
 import NFTPreviewSection from './components/NFTPreviewSection';
 import CommunitySection from './components/CommunitySection';
 import AirdropChecker from './components/AirdropChecker';
+import AirdropWaitlist from './components/AirdropWaitlist';
 import Footer from './components/Footer';
 import SmokeBackground from './components/SmokeBackground';
 import NFTCollectionPage from './pages/NFTCollectionPage';
@@ -31,6 +32,7 @@ function App() {
             <TokenomicsSection />
             <RoadmapSection />
             <NFTPreviewSection />
+            <AirdropWaitlist />
             <AirdropChecker />
             <CommunitySection />
             <Footer />
