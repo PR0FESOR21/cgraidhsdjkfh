@@ -66,29 +66,35 @@ const TokenomicsSection: React.FC = () => {
               <div className="relative w-64 h-64 md:w-80 md:h-80">
                 <svg viewBox="0 0 100 100" className="w-full h-full transform -rotate-90">
                   {tokenomics.map((item, index) => {
-                    const prevPercentages = tokenomics
-                      .slice(0, index)
-                      .reduce((sum, item) => sum + item.percentage, 0);
-                    const offset = (prevPercentages / 100) * 100;
-                    const percent = item.percentage;
-                    
-                    return (
-                      <motion.circle
-                        key={item.name}
-                        cx="50"
-                        cy="50"
-                        r="40"
-                        fill="transparent"
-                        stroke={item.color}
-                        strokeWidth="20"
-                        strokeDasharray={`${percent} ${100 - percent}`}
-                        strokeDashoffset={-offset}
-                        initial={{ strokeDashoffset: 100 }}
-                        animate={inView ? { strokeDashoffset: -offset } : { strokeDashoffset: 100 }}
-                        transition={{ duration: 1, delay: 0.2 + index * 0.2 }}
-                      />
-                    );
-                  })}
+  const radius = 40;
+  const circumference = 2 * Math.PI * radius;
+
+  // Hitung total offset sebelumnya
+  const prevPercentages = tokenomics
+    .slice(0, index)
+    .reduce((sum, i) => sum + i.percentage, 0);
+
+  const offset = (prevPercentages / 100) * circumference;
+  const dash = (item.percentage / 100) * circumference;
+
+  return (
+    <motion.circle
+      key={item.name}
+      cx="50"
+      cy="50"
+      r={radius}
+      fill="transparent"
+      stroke={item.color}
+      strokeWidth="20"
+      strokeDasharray={`${dash} ${circumference - dash}`}
+      strokeDashoffset={-offset}
+      initial={{ strokeDashoffset: circumference }}
+      animate={inView ? { strokeDashoffset: -offset } : { strokeDashoffset: circumference }}
+      transition={{ duration: 1, delay: 0.2 + index * 0.2 }}
+    />
+  );
+})}
+
                   <circle cx="50" cy="50" r="30" fill="#0f0f0f" />
                   <text x="50" y="50" textAnchor="middle" dominantBaseline="middle" fill="#f7931e" fontSize="10" fontWeight="bold">
                     $CIGAR
