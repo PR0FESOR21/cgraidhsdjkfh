@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { Flame, Droplets, BadgeDollarSign, Gift } from 'lucide-react';
+import { Gift, Palette, Diamond, Globe, Droplets, BadgeDollarSign, Brain, Handshake, Archive } from 'lucide-react';
 
 const TokenomicsSection: React.FC = () => {
   const [ref, inView] = useInView({
@@ -9,12 +9,16 @@ const TokenomicsSection: React.FC = () => {
     threshold: 0.2,
   });
 
-  // Tokenomics data
   const tokenomics = [
-    { name: 'Burn Wallet 🔥', percentage: 30, color: '#E25822', icon: Flame, label: 'Ashtray' },
-    { name: 'Liquidity Pool 💧', percentage: 40, color: '#3B82F6', icon: Droplets, label: 'Lighter Fluid' },
-    { name: 'Marketing 📢', percentage: 20, color: '#F7931E', icon: BadgeDollarSign, label: 'Smoke Signals' },
-    { name: 'Airdrop & Community 🎁', percentage: 10, color: '#10B981', icon: Gift, label: 'Sharing a Smoke' },
+    { name: 'Community Airdrop 🔥', percentage: 25, color: '#E25822', icon: Gift, label: 'For registered users (based on Base activity)' },
+    { name: 'NFT Holder Rewards 🎨', percentage: 5, color: '#9333EA', icon: Palette, label: 'For official $CIGAR NFT holders' },
+    { name: 'Holder Reward 💎', percentage: 10, color: '#2563EB', icon: Diamond, label: 'For holders who don\'t sell (silent snapshot)' },
+    { name: 'Ecosystem & LP Rewards 🌐', percentage: 20, color: '#059669', icon: Globe, label: 'For LP staking, events & community (12-month vesting)' },
+    { name: 'Liquidity Provision 💧', percentage: 10, color: '#3B82F6', icon: Droplets, label: 'Provided on DEX (Base/ETH/USDC pair)' },
+    { name: 'Marketing & Campaigns 📣', percentage: 12, color: '#F7931E', icon: BadgeDollarSign, label: 'Campaigns, collaborations & promotions' },
+    { name: 'Core Team 🧠', percentage: 8, color: '#DC2626', icon: Brain, label: '8 months cliff + 18 months linear vesting' },
+    { name: 'Strategic & Listings 🤝', percentage: 5, color: '#8B5CF6', icon: Handshake, label: 'For CEX listings & strategic partners (locked)' },
+    { name: 'Reserve & Operational 🧾', percentage: 5, color: '#6B7280', icon: Archive, label: 'Including reserve & development fund' },
   ];
 
   const containerVariants = {
@@ -40,16 +44,16 @@ const TokenomicsSection: React.FC = () => {
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
           variants={containerVariants}
-          className="max-w-5xl mx-auto"
+          className="max-w-6xl mx-auto"
         >
           <motion.div className="text-center mb-16" variants={itemVariants}>
             <h2 className="section-title">Tokenomics</h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Total Supply: 1,000,000,000 $CIGAR
+              Total Supply: 10,000,000,000 $CIGAR
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Circular Chart */}
             <motion.div 
               className="flex justify-center items-center"
@@ -58,7 +62,6 @@ const TokenomicsSection: React.FC = () => {
               <div className="relative w-64 h-64 md:w-80 md:h-80">
                 <svg viewBox="0 0 100 100" className="w-full h-full transform -rotate-90">
                   {tokenomics.map((item, index) => {
-                    // Calculate the segment properties
                     const prevPercentages = tokenomics
                       .slice(0, index)
                       .reduce((sum, item) => sum + item.percentage, 0);
@@ -88,7 +91,6 @@ const TokenomicsSection: React.FC = () => {
                   </text>
                 </svg>
 
-                {/* Animated ember effect at the center */}
                 <motion.div 
                   className="absolute inset-0 flex items-center justify-center pointer-events-none"
                   initial={{ opacity: 0 }}
@@ -102,7 +104,7 @@ const TokenomicsSection: React.FC = () => {
 
             {/* Tokenomics List */}
             <motion.div className="flex flex-col justify-center" variants={itemVariants}>
-              <div className="space-y-6">
+              <div className="space-y-4">
                 {tokenomics.map((item, index) => (
                   <motion.div 
                     key={item.name}
@@ -119,11 +121,11 @@ const TokenomicsSection: React.FC = () => {
                       <item.icon size={24} color={item.color} />
                     </div>
                     <div className="flex-1">
-                      <div className="flex justify-between">
+                      <div className="flex justify-between items-start">
                         <h3 className="font-semibold text-white">{item.name}</h3>
-                        <span className="font-bold text-cigar-gold">{item.percentage}%</span>
+                        <span className="font-bold text-cigar-gold ml-2">{item.percentage}%</span>
                       </div>
-                      <p className="text-sm text-gray-400">{item.label}</p>
+                      <p className="text-sm text-gray-400 mt-1">{item.label}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -136,7 +138,7 @@ const TokenomicsSection: React.FC = () => {
                 transition={{ duration: 0.5, delay: 0.6 }}
               >
                 <p className="text-sm text-gray-300">
-                  <span className="font-semibold text-cigar-gold">Smoker's Fee:</span> 2% on each transaction - 1% to holders, 1% to burn wallet.
+                  <span className="font-semibold text-cigar-gold">Transaction Fee:</span> 2% on each transaction - 1% distributed to holders, 1% sent to burn wallet.
                 </p>
               </motion.div>
             </motion.div>
