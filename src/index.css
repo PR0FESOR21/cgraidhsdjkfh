@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  
+  body {
+    @apply bg-dark text-white font-montserrat;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply px-6 py-2 rounded-full font-semibold transition-all duration-300 inline-block;
+  }
+  
+  .btn-primary {
+    @apply btn bg-cigar-gold text-dark hover:bg-cigar-ember hover:shadow-[0_0_15px_rgba(247,147,30,0.7)];
+  }
+  
+  .btn-outline {
+    @apply btn border-2 border-cigar-gold text-cigar-gold hover:bg-cigar-gold hover:text-dark hover:shadow-[0_0_15px_rgba(247,147,30,0.7)];
+  }
+  
+  .section-title {
+    @apply text-3xl md:text-4xl lg:text-5xl font-bold mb-8 text-cigar-gold;
+  }
+  
+  .container-custom {
+    @apply container mx-auto px-4 py-16 md:py-24;
+  }
+}
+
+/* Smoke Animation */
+.smoke-container {
+  @apply relative w-full h-full overflow-hidden pointer-events-none absolute top-0 left-0 opacity-70;
+}
+
+.smoke-particle {
+  @apply absolute w-10 h-10 rounded-full bg-gray-200/20 backdrop-blur-sm;
+}
