@@ -11,7 +11,7 @@ const HeroSection: React.FC = () => {
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="z-10 lg:col-span-5"
+            className="z-10 lg:col-span-6"
           >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
               Meet <span className="text-cigar-gold">$CIGAR</span>:
@@ -65,9 +65,9 @@ const HeroSection: React.FC = () => {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative hidden lg:block lg:col-span-7"
+            className="relative hidden lg:block lg:col-span-6"
           >
-            <img src="images/hero.png" alt="Cigar Mascot" className="w-11/12 h-auto mx-auto" />
+            <img src="images/hero.png" alt="Cigar Mascot" className="w-full h-auto mx-auto" />
             
             {/* Animated smoke elements */}
             <div className="absolute top-10 right-32">
