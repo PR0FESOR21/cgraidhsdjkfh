@@ -18,6 +18,7 @@ const AirdropWaitlist: React.FC = () => {
   const [hasMetaMask, setHasMetaMask] = useState(false);
   const [hasOKX, setHasOKX] = useState(false);
   const [currentWallet, setCurrentWallet] = useState<'metamask' | 'okx' | null>(null);
+  const [connectingWallet, setConnectingWallet] = useState<'metamask' | 'okx' | null>(null);
 
   useEffect(() => {
     setHasMetaMask(typeof window.ethereum !== 'undefined');
@@ -26,6 +27,7 @@ const AirdropWaitlist: React.FC = () => {
 
   const connectMetaMask = async () => {
     try {
+      setConnectingWallet('metamask');
       if (!hasMetaMask) {
         throw new Error('MetaMask is not installed. Please install MetaMask to continue.');
       }
@@ -46,11 +48,14 @@ const AirdropWaitlist: React.FC = () => {
     } catch (err) {
       console.error('Error connecting to MetaMask:', err);
       setError(err instanceof Error ? err.message : 'Failed to connect to MetaMask');
+    } finally {
+      setConnectingWallet(null);
     }
   };
 
   const connectOKX = async () => {
     try {
+      setConnectingWallet('okx');
       if (!hasOKX) {
         throw new Error('OKX Wallet is not installed. Please install OKX Wallet to continue.');
       }
@@ -76,6 +81,8 @@ const AirdropWaitlist: React.FC = () => {
         ? err.message
         : 'Failed to connect to OKX Wallet';
       setError(errorMessage);
+    } finally {
+      setConnectingWallet(null);
     }
   };
 
@@ -225,7 +232,7 @@ const AirdropWaitlist: React.FC = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="fixed inset-0 bg-black/80 backdrop-blur-sm"
-              onClick={() => setShowWalletModal(false)}
+              onClick={() => !connectingWallet && setShowWalletModal(false)}
             />
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
@@ -235,20 +242,26 @@ const AirdropWaitlist: React.FC = () => {
             >
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-bold text-white">Connect Wallet</h3>
-                <button onClick={() => setShowWalletModal(false)} className="text-gray-400 hover:text-white transition-colors">
-                  <X size={24} />
-                </button>
+                {!connectingWallet && (
+                  <button onClick={() => setShowWalletModal(false)} className="text-gray-400 hover:text-white transition-colors">
+                    <X size={24} />
+                  </button>
+                )}
               </div>
 
               <div className="space-y-4">
                 <motion.button
-                  className={`w-full p-4 rounded-lg bg-dark/50 border border-cigar-gold/20 hover:border-cigar-gold/50 transition-all flex items-center gap-3 text-left ${!hasMetaMask && 'opacity-50 cursor-not-allowed'}`}
+                  className={`w-full p-4 rounded-lg bg-dark/50 border border-cigar-gold/20 hover:border-cigar-gold/50 transition-all flex items-center gap-3 text-left ${(!hasMetaMask || connectingWallet) && 'opacity-50 cursor-not-allowed'}`}
                   onClick={connectMetaMask}
-                  whileHover={hasMetaMask ? { scale: 1.02 } : {}}
-                  whileTap={hasMetaMask ? { scale: 0.98 } : {}}
-                  disabled={!hasMetaMask}
+                  whileHover={hasMetaMask && !connectingWallet ? { scale: 1.02 } : {}}
+                  whileTap={hasMetaMask && !connectingWallet ? { scale: 0.98 } : {}}
+                  disabled={!hasMetaMask || !!connectingWallet}
                 >
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask" className="w-8 h-8" />
+                  {connectingWallet === 'metamask' ? (
+                    <div className="w-8 h-8 border-2 border-cigar-gold border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask" className="w-8 h-8" />
+                  )}
                   <div>
                     <p className="font-semibold">MetaMask</p>
                     <p className="text-sm text-gray-400">
@@ -258,13 +271,17 @@ const AirdropWaitlist: React.FC = () => {
                 </motion.button>
 
                 <motion.button
-                  className={`w-full p-4 rounded-lg bg-dark/50 border border-cigar-gold/20 hover:border-cigar-gold/50 transition-all flex items-center gap-3 text-left ${!hasOKX && 'opacity-50 cursor-not-allowed'}`}
+                  className={`w-full p-4 rounded-lg bg-dark/50 border border-cigar-gold/20 hover:border-cigar-gold/50 transition-all flex items-center gap-3 text-left ${(!hasOKX || connectingWallet) && 'opacity-50 cursor-not-allowed'}`}
                   onClick={connectOKX}
-                  whileHover={hasOKX ? { scale: 1.02 } : {}}
-                  whileTap={hasOKX ? { scale: 0.98 } : {}}
-                  disabled={!hasOKX}
+                  whileHover={hasOKX && !connectingWallet ? { scale: 1.02 } : {}}
+                  whileTap={hasOKX && !connectingWallet ? { scale: 0.98 } : {}}
+                  disabled={!hasOKX || !!connectingWallet}
                 >
-                  <img src="https://static.okx.com/cdn/assets/imgs/241/C66135F3E522346E.png" alt="OKX" className="w-8 h-8" />
+                  {connectingWallet === 'okx' ? (
+                    <div className="w-8 h-8 border-2 border-cigar-gold border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <img src="https://static.okx.com/cdn/assets/imgs/241/C66135F3E522346E.png" alt="OKX" className="w-8 h-8" />
+                  )}
                   <div>
                     <p className="font-semibold">OKX Wallet</p>
                     <p className="text-sm text-gray-400">
