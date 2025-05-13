@@ -17,7 +17,7 @@ const TokenomicsSection: React.FC = () => {
     { name: 'Liquidity Provision 💧', percentage: 10, color: '#3B82F6', icon: Droplets, label: 'Provided on DEX (Base/ETH/USDC pair)' },
     { name: 'Marketing & Campaigns 📣', percentage: 12, color: '#E25822', icon: BadgeDollarSign, label: 'Campaigns, collaborations & promotions' },
     { name: 'Core Team 🧠', percentage: 8, color: '#DC2626', icon: Brain, label: '8 months cliff + 18 months linear vesting' },
-    { name: 'Strategic & Listings 🤝', percentage: 5, color: '#9333EA', icon: Handshake, label: 'For CEX listings & strategic partners (locked)' },
+    { name: 'Strategic & Listings 🤝', percentage: 5, color: '#22D3EE', icon: Handshake, label: 'For CEX listings & strategic partners (locked)' },
     { name: 'Reserve & Operational 🧾', percentage: 5, color: '#6B7280', icon: Archive, label: 'Including reserve & development fund' },
   ];
 
