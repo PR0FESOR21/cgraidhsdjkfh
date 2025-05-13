@@ -66,35 +66,51 @@ const TokenomicsSection: React.FC = () => {
               <div className="relative w-64 h-64 md:w-80 md:h-80">
                 <svg viewBox="0 0 100 100" className="w-full h-full transform -rotate-90">
                   {tokenomics.map((item, index) => {
-  const radius = 40;
-  const circumference = 2 * Math.PI * radius;
+                    const radius = 40;
+                    const circumference = 2 * Math.PI * radius;
+                    const prevPercentages = tokenomics
+                      .slice(0, index)
+                      .reduce((sum, i) => sum + i.percentage, 0);
+                    const offset = (prevPercentages / 100) * circumference;
+                    const dash = (item.percentage / 100) * circumference;
+                    const angle = ((prevPercentages + item.percentage / 2) / 100) * 360;
+                    const labelRadius = 30;
+                    const labelX = 50 + labelRadius * Math.cos((angle - 90) * Math.PI / 180);
+                    const labelY = 50 + labelRadius * Math.sin((angle - 90) * Math.PI / 180);
 
-  // Hitung total offset sebelumnya
-  const prevPercentages = tokenomics
-    .slice(0, index)
-    .reduce((sum, i) => sum + i.percentage, 0);
-
-  const offset = (prevPercentages / 100) * circumference;
-  const dash = (item.percentage / 100) * circumference;
-
-  return (
-    <motion.circle
-      key={item.name}
-      cx="50"
-      cy="50"
-      r={radius}
-      fill="transparent"
-      stroke={item.color}
-      strokeWidth="20"
-      strokeDasharray={`${dash} ${circumference - dash}`}
-      strokeDashoffset={-offset}
-      initial={{ strokeDashoffset: circumference }}
-      animate={inView ? { strokeDashoffset: -offset } : { strokeDashoffset: circumference }}
-      transition={{ duration: 1, delay: 0.2 + index * 0.2 }}
-    />
-  );
-})}
-
+                    return (
+                      <React.Fragment key={item.name}>
+                        <motion.circle
+                          cx="50"
+                          cy="50"
+                          r={radius}
+                          fill="transparent"
+                          stroke={item.color}
+                          strokeWidth="20"
+                          strokeDasharray={`${dash} ${circumference - dash}`}
+                          strokeDashoffset={-offset}
+                          initial={{ strokeDashoffset: circumference }}
+                          animate={inView ? { strokeDashoffset: -offset } : { strokeDashoffset: circumference }}
+                          transition={{ duration: 1, delay: 0.2 + index * 0.2 }}
+                        />
+                        <motion.text
+                          x={labelX}
+                          y={labelY}
+                          fill={item.color}
+                          fontSize="4"
+                          textAnchor="middle"
+                          dominantBaseline="middle"
+                          className="font-bold"
+                          transform={`rotate(${angle}, ${labelX}, ${labelY})`}
+                          initial={{ opacity: 0 }}
+                          animate={inView ? { opacity: 1 } : { opacity: 0 }}
+                          transition={{ duration: 0.5, delay: 1 + index * 0.1 }}
+                        >
+                          {item.percentage}%
+                        </motion.text>
+                      </React.Fragment>
+                    );
+                  })}
                   <circle cx="50" cy="50" r="30" fill="#0f0f0f" />
                   <text x="50" y="50" textAnchor="middle" dominantBaseline="middle" fill="#f7931e" fontSize="10" fontWeight="bold">
                     $CIGAR
