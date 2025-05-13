@@ -36,6 +36,10 @@ const TokenomicsSection: React.FC = () => {
     visible: { y: 0, opacity: 1 },
   };
 
+  // Split tokenomics into two parts: first 5 and remaining
+  const topTokenomics = tokenomics.slice(0, 5);
+  const bottomTokenomics = tokenomics.slice(5);
+
   return (
     <section id="tokenomics" className="relative py-5 bg-gradient-to-b from-dark to-black overflow-hidden">
       <div className="container-custom">
@@ -53,7 +57,7 @@ const TokenomicsSection: React.FC = () => {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
             {/* Circular Chart */}
             <motion.div 
               className="flex justify-center items-center"
@@ -102,10 +106,10 @@ const TokenomicsSection: React.FC = () => {
               </div>
             </motion.div>
 
-            {/* Tokenomics List */}
+            {/* Top 5 Tokenomics List */}
             <motion.div className="flex flex-col justify-center" variants={itemVariants}>
               <div className="space-y-4">
-                {tokenomics.map((item, index) => (
+                {topTokenomics.map((item, index) => (
                   <motion.div 
                     key={item.name}
                     className="flex items-center p-4 rounded-lg bg-dark/50 border border-gray-800"
@@ -129,20 +133,52 @@ const TokenomicsSection: React.FC = () => {
                     </div>
                   </motion.div>
                 ))}
-              </div>
 
-              <motion.div 
-                className="mt-8 p-4 rounded-lg border border-cigar-gold/30 bg-gradient-to-r from-dark to-cigar-gold/10"
-                initial={{ opacity: 0 }}
-                animate={inView ? { opacity: 1 } : { opacity: 0 }}
-                transition={{ duration: 0.5, delay: 0.6 }}
-              >
-                <p className="text-sm text-gray-300">
-                  <span className="font-semibold text-cigar-gold">Transaction Fee:</span> 2% on each transaction - 1% distributed to holders, 1% sent to burn wallet.
-                </p>
-              </motion.div>
+                {/* Transaction Fee Info */}
+                <motion.div 
+                  className="p-4 rounded-lg border border-cigar-gold/30 bg-gradient-to-r from-dark to-cigar-gold/10"
+                  initial={{ opacity: 0 }}
+                  animate={inView ? { opacity: 1 } : { opacity: 0 }}
+                  transition={{ duration: 0.5, delay: 0.6 }}
+                >
+                  <p className="text-sm text-gray-300">
+                    <span className="font-semibold text-cigar-gold">Transaction Fee:</span> 2% on each transaction - 1% distributed to holders, 1% sent to burn wallet.
+                  </p>
+                </motion.div>
+              </div>
             </motion.div>
           </div>
+
+          {/* Bottom Tokenomics List */}
+          <motion.div 
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
+            variants={containerVariants}
+          >
+            {bottomTokenomics.map((item, index) => (
+              <motion.div 
+                key={item.name}
+                className="flex items-center p-4 rounded-lg bg-dark/50 border border-gray-800"
+                initial={{ y: 20, opacity: 0 }}
+                animate={inView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
+                whileHover={{ y: -5 }}
+              >
+                <div 
+                  className="w-12 h-12 rounded-full flex items-center justify-center mr-4"
+                  style={{ backgroundColor: `${item.color}20` }}
+                >
+                  <item.icon size={24} color={item.color} />
+                </div>
+                <div className="flex-1">
+                  <div className="flex justify-between items-start">
+                    <h3 className="font-semibold text-white">{item.name}</h3>
+                    <span className="font-bold text-cigar-gold ml-2">{item.percentage}%</span>
+                  </div>
+                  <p className="text-sm text-gray-400 mt-1">{item.label}</p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
         </motion.div>
       </div>
     </section>
