@@ -133,25 +133,30 @@ const TokenomicsSection: React.FC = () => {
                     </div>
                   </motion.div>
                 ))}
-
-                {/* Transaction Fee Info */}
-                <motion.div 
-                  className="p-4 rounded-lg border border-cigar-gold/30 bg-gradient-to-r from-dark to-cigar-gold/10"
-                  initial={{ opacity: 0 }}
-                  animate={inView ? { opacity: 1 } : { opacity: 0 }}
-                  transition={{ duration: 0.5, delay: 0.6 }}
-                >
-                  <p className="text-sm text-gray-300">
-                    <span className="font-semibold text-cigar-gold">Transaction Fee:</span> 2% on each transaction - 1% distributed to holders, 1% sent to burn wallet.
-                  </p>
-                </motion.div>
               </div>
             </motion.div>
           </div>
 
-          {/* Bottom Tokenomics List */}
+          {/* Transaction Fee Info - Moves below on mobile/tablet */}
           <motion.div 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
+            className="lg:col-start-2 mb-8 lg:mb-0"
+            variants={itemVariants}
+          >
+            <motion.div 
+              className="p-4 rounded-lg border border-cigar-gold/30 bg-gradient-to-r from-dark to-cigar-gold/10"
+              initial={{ opacity: 0 }}
+              animate={inView ? { opacity: 1 } : { opacity: 0 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+            >
+              <p className="text-sm text-gray-300">
+                <span className="font-semibold text-cigar-gold">Transaction Fee:</span> 2% on each transaction - 1% distributed to holders, 1% sent to burn wallet.
+              </p>
+            </motion.div>
+          </motion.div>
+
+          {/* Bottom Tokenomics List - 2 rows */}
+          <motion.div 
+            className="grid grid-cols-1 md:grid-cols-2 gap-4"
             variants={containerVariants}
           >
             {bottomTokenomics.map((item, index) => (
