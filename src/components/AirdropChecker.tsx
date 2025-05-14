@@ -255,5 +255,3 @@ const AirdropChecker: React.FC = () => {
 };
 
 export default AirdropChecker;
-
-export default AirdropChecker
