@@ -4,7 +4,7 @@ import { useInView } from 'react-intersection-observer';
 import { Wallet, Gift, AlertCircle, X } from 'lucide-react';
 import { useAccount, useConnect, useDisconnect, useSwitchChain } from 'wagmi';
 import { base } from 'wagmi/chains';
-import { injected } from 'wagmi/connectors';
+import { injected } from 'wagmi/connectors/injected';
 
 interface AirdropResponse {
   status: string;
