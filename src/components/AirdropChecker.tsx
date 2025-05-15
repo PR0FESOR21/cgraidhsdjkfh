@@ -4,7 +4,7 @@ import { useInView } from 'react-intersection-observer';
 import { Wallet, Gift, AlertCircle, X } from 'lucide-react';
 import { useAccount, useConnect, useDisconnect, useSwitchChain } from 'wagmi';
 import { base } from 'wagmi/chains';
-import { injected } from 'wagmi/connectors/injected';
+import { InjectedConnector } from 'wagmi/connectors/injected';
 
 interface AirdropResponse {
   status: string;
@@ -34,7 +34,7 @@ const AirdropChecker: React.FC = () => {
 
   const handleConnect = async (type: 'metamask' | 'okx') => {
     try {
-      await connect({ connector: injected() });
+      await connect({ connector: new InjectedConnector() });
     } catch (err) {
       console.error('Error connecting wallet:', err);
       setError(err instanceof Error ? err.message : 'Failed to connect wallet');
