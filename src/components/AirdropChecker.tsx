@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Wallet, Gift, AlertCircle, X } from 'lucide-react';
-import { useAccount, useConnect, useDisconnect, useSwitchChain } from 'wagmi';
-import { base } from 'wagmi/chains';
+import { useAccount, useConnect, useDisconnect } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 
 interface AirdropResponse {
@@ -22,15 +21,11 @@ const AirdropChecker: React.FC = () => {
   const { address, chainId } = useAccount();
   const { connect } = useConnect();
   const { disconnect } = useDisconnect();
-  const { switchChain } = useSwitchChain();
   
   const [isLoading, setIsLoading] = useState(false);
   const [airdropAmount, setAirdropAmount] = useState<string | null>(null);
   const [error, setError] = useState('');
   const [showWalletModal, setShowWalletModal] = useState(false);
-  const [showNetworkModal, setShowNetworkModal] = useState(false);
-
-  const isWrongNetwork = chainId !== base.id;
 
   const handleConnect = async (type: 'metamask' | 'okx') => {
     try {
@@ -38,16 +33,6 @@ const AirdropChecker: React.FC = () => {
     } catch (err) {
       console.error('Error connecting wallet:', err);
       setError(err instanceof Error ? err.message : 'Failed to connect wallet');
-    }
-  };
-
-  const handleSwitchNetwork = async () => {
-    try {
-      await switchChain({ chainId: base.id });
-      setShowNetworkModal(false);
-    } catch (err) {
-      console.error('Error switching network:', err);
-      setError('Failed to switch network. Please try again.');
     }
   };
 
@@ -127,16 +112,7 @@ const AirdropChecker: React.FC = () => {
                   <p className="font-mono text-sm text-gray-300 truncate">{address}</p>
                 </div>
 
-                {isWrongNetwork ? (
-                  <motion.button
-                    className="btn-primary flex items-center gap-2 mx-auto"
-                    onClick={handleSwitchNetwork}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    Switch to Base Network
-                  </motion.button>
-                ) : !airdropAmount && !isLoading && (
+                {!airdropAmount && !isLoading && (
                   <motion.button
                     className="btn-primary flex items-center gap-2 mx-auto"
                     onClick={checkAirdrop}
@@ -189,7 +165,7 @@ const AirdropChecker: React.FC = () => {
 
           <motion.div className="mt-8 p-6 rounded-lg bg-gradient-to-r from-dark via-cigar-ember/20 to-dark border border-cigar-gold/30" variants={containerVariants}>
             <p className="text-center text-sm text-gray-400">
-              Make sure you're connected to the Base network to check your airdrop allocation.
+              Connect your wallet to check your airdrop allocation.
             </p>
           </motion.div>
         </motion.div>
